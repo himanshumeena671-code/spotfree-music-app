@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static frontend folder inside backend/frontend
+# Serve frontend static files
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend"))
 if os.path.exists(frontend_dir):
     app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
@@ -105,7 +105,3 @@ def stream_audio(url: str):
             return {"stream_url": audio_url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

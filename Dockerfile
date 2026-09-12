@@ -5,10 +5,7 @@ WORKDIR /app
 COPY backend/requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/ /app/backend/
-COPY extracted_ui/ /app/extracted_ui/
-
-WORKDIR /app/backend
+COPY backend/ .
 
 EXPOSE 10000
 
