@@ -15,21 +15,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve frontend static files from ../frontend (since we run from backend or root)
-frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend"))
-if not os.path.exists(frontend_path):
-    frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend"))
-
-if os.path.exists(frontend_path):
-    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+# Serve static frontend folder inside backend/frontend
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend"))
+if os.path.exists(frontend_dir):
+    app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 @app.get("/")
 def read_root():
-    index_file = os.path.join(frontend_path, "index.html")
+    index_file = os.path.join(frontend_dir, "index.html")
     if os.path.exists(index_file):
         with open(index_file, "r", encoding="utf-8") as f:
             return Response(content=f.read(), media_type="text/html")
-    return RedirectResponse(url="/static/index.html")
+    return {"message": "SpotFree API is running."}
 
 @app.get("/api/search")
 def search_tracks(q: str):

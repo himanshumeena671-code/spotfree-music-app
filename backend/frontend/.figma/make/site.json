@@ -1,0 +1,10 @@
+{
+  "description": "Stream and discover music effortlessly with a sleek dark-mode interface featuring personalized playlists, top charts, and intuitive playback controls.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
