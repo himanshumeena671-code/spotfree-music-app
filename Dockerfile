@@ -2,10 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir fastapi uvicorn yt-dlp requests pydantic
+COPY backend/requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/main.py main.py
-COPY extracted_ui/ /app/frontend/
+COPY backend/ /app/backend/
+COPY extracted_ui/ /app/extracted_ui/
+
+WORKDIR /app/backend
 
 EXPOSE 10000
 
