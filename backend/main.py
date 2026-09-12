@@ -15,18 +15,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve built frontend static files from dist
-frontend_dist_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend/dist"))
-if os.path.exists(frontend_dist_path):
-    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist_path, "assets")), name="assets")
+# Serve frontend static files from ../frontend (since we run from backend or root)
+frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend"))
+if not os.path.exists(frontend_path):
+    frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend"))
+
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 @app.get("/")
 def read_root():
-    index_file = os.path.join(frontend_dist_path, "index.html")
+    index_file = os.path.join(frontend_path, "index.html")
     if os.path.exists(index_file):
         with open(index_file, "r", encoding="utf-8") as f:
             return Response(content=f.read(), media_type="text/html")
-    return {"message": "SpotFree API is running. Build frontend first."}
+    return RedirectResponse(url="/static/index.html")
 
 @app.get("/api/search")
 def search_tracks(q: str):
@@ -64,7 +67,7 @@ def search_tracks(q: str):
                     "duration": duration_str,
                     "duration_sec": duration_sec,
                     "thumbnail": entry.get('thumbnail', 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&q=80'),
-                    "url": f"https://www.watch?v={entry.get('id')}" if not entry.get('url') else entry.get('url')
+                    "url": f"https://www.youtube.com/watch?v={entry.get('id')}"
                 })
                 
             return {"results": tracks}
