@@ -4,10 +4,7 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir fastapi uvicorn yt-dlp requests pydantic
 
-COPY backend/ /app/backend/
-COPY extracted_ui/ /app/frontend/
-
-WORKDIR /app/backend
+COPY . /app/
 
 EXPOSE 10000
 
